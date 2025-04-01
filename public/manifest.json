@@ -2,6 +2,7 @@
   "name": "My Extension",
   "version": "1.0.0",
   "manifest_version": 3,
+  "description": "An Extension that Features Tab Manager, Ad Blocker, Productivity Tracker",
   "background": {
     "service_worker": "background.js",
     "type": "module"
