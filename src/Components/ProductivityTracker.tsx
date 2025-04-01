@@ -4,11 +4,10 @@ const ProductivityTracker: React.FC = () => {
   const [webSiteTime, setWebSiteTime] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    chrome.runtime.sendMessage({ action: "getTime" }, (response) => {
-      if (response) {
-        console.log(response)
-        setWebSiteTime(response);
-      }
+    chrome.storage.local.get("siteTimes", (data) => {
+        if (data.siteTimes) {
+          setWebSiteTime(data.siteTimes);
+        }
     });
   }, []);
 

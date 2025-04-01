@@ -16,7 +16,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 // Listen for messages from popup or content script
-chrome.runtime.onMessage.addListener(async (message, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message) => {
   switch (message.action) {
     case "categorizeGroups":
       try {
@@ -65,15 +65,6 @@ chrome.runtime.onMessage.addListener(async (message, _sender, sendResponse) => {
         action: "updateCount",
         count: message.count,
       });
-      break;
-
-    case "getTime":
-      chrome.storage.local.get("siteTimes", (data) => {
-        if (data.siteTimes) {
-          sendResponse(data.siteTimes);
-        }
-      });
-      return true;
       break;
 
     case "resetTime":
