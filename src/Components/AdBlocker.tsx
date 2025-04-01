@@ -34,7 +34,7 @@ const Adblocker: React.FC = () => {
     <div className="extension">
       <h2>Ad Blocker</h2>
       <button onClick={toggleBlocker}>{enabled ? "Disable" : "Enable"}</button>
-      <p>Ads Blocked: {count}</p>
+      {enabled &&(<p>Ads Blocked: {count}</p>)}
     </div>
   );
 };
