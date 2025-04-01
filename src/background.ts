@@ -16,25 +16,22 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 // Listen for messages from popup or content script
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async(message, _sender, sendResponse) => {
   switch (message.action) {
     case "categorizeGroups":
-      (async () => {
+      try {
         const tabs = await getCurrentWindowTabs();
         const tabIds = tabs.map(({ id }) => id).filter(Boolean) as number[];
         let categorizedTabs: Record<string, number[]> = {};
 
         if (tabIds.length) {
-          try {
-            categorizedTabs = await categorizeTabs(tabIds);
-            await groupTabsByCategory(categorizedTabs);
-            console.log("Categorized Tabs:", categorizedTabs);
-          } catch (error) {
-            console.error("Failed to categorize and group tabs:", error);
-            return;
-          }
+          categorizedTabs = await categorizeTabs(tabIds);
+          await groupTabsByCategory(categorizedTabs);
+          console.log("Categorized Tabs:", categorizedTabs);
         }
-      })();
+      } catch (error) {
+        console.error("Failed to categorize and group tabs:", error);
+      }
       break;
 
     case "saveSession":
