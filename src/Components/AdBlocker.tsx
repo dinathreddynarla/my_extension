@@ -16,7 +16,7 @@ const Adblocker: React.FC = () => {
 
     // Listen for count updates
     chrome.runtime.onMessage.addListener((message) => {
-      if (message.type === "UPDATE_COUNT") {
+      if (message.action === "updateCount") {
         setCount(message.count);
       }
     });
@@ -25,7 +25,7 @@ const Adblocker: React.FC = () => {
   const toggleBlocker = () => {
     const newState = !enabled;
     setEnabled(newState);
-    chrome.runtime.sendMessage({ type: "TOGGLE_BLOCKER", enabled: newState });
+    chrome.runtime.sendMessage({ action: "toggleBlocker", enabled: newState });
     console.log(count, newState);
     if (!newState) setCount(0);
   };
@@ -34,7 +34,7 @@ const Adblocker: React.FC = () => {
     <div className="extension">
       <h2>Ad Blocker</h2>
       <button onClick={toggleBlocker}>{enabled ? "Disable" : "Enable"}</button>
-      <p style={{ fontSize: "1.5em" }}>Ads Blocked: {count}</p>
+      <p>Ads Blocked: {count}</p>
     </div>
   );
 };

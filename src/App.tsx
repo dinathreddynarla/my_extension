@@ -1,6 +1,7 @@
 import Adblocker from "./Components/AdBlocker";
 import "./App.css";
 import TabManger from "./Components/TabManger";
+import ProductivityTracker from "./Components/ProductivityTracker";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <h1>My Extension</h1>
       <TabManger />
       <Adblocker />
+      <ProductivityTracker />
     </div>
   );
 }

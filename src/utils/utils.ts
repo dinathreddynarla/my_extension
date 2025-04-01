@@ -7,6 +7,7 @@ export function isValidUrl(url: string): boolean {
     !url.endsWith(".pdf")
   );
 }
+
 // chrome accepted tab colors for tab manager
 export function getRandomGroupColor(): chrome.tabGroups.ColorEnum {
   const colors: chrome.tabGroups.ColorEnum[] = [
@@ -40,9 +41,18 @@ export async function injectContentScripts(tabs: chrome.tabs.Tab[]) {
           });
           console.log(`Content script injected into tab ${tab.id}`);
         } catch (error) {
-          console.error(`Failed to inject content script into tab ${tab.id}:`, error);
+          console.error(
+            `Failed to inject content script into tab ${tab.id}:`,
+            error
+          );
         }
       }
     })
   );
 }
+
+//host name for productivity tracker
+export const getHostName = (url: string | undefined): string | null => {
+  if (!url) return null;
+  return new URL(url).hostname;
+};

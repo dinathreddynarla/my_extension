@@ -1,3 +1,4 @@
+import { resetTracker } from "./ProductivityTracker/productivityTracker";
 import {
   categorizeTabs,
   groupTabsByCategory,
@@ -15,53 +16,76 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 // Listen for messages from popup or content script
-chrome.runtime.onMessage.addListener((message) => {
-  if (message.action === "categorizeGroups") {
-    (async () => {
-      const tabs = await getCurrentWindowTabs();
-      const tabIds = tabs.map(({ id }) => id).filter(Boolean) as number[];
-      let categorizedTabs: Record<string, number[]> = {};
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  switch (message.action) {
+    case "categorizeGroups":
+      (async () => {
+        const tabs = await getCurrentWindowTabs();
+        const tabIds = tabs.map(({ id }) => id).filter(Boolean) as number[];
+        let categorizedTabs: Record<string, number[]> = {};
 
-      if (tabIds.length) {
-        try {
-          categorizedTabs = await categorizeTabs(tabIds);
-          await groupTabsByCategory(categorizedTabs);
-          console.log("Categorized Tabs:", categorizedTabs);
-        } catch (error) {
-          console.error("Failed to categorize and group tabs:", error);
-          return;
+        if (tabIds.length) {
+          try {
+            categorizedTabs = await categorizeTabs(tabIds);
+            await groupTabsByCategory(categorizedTabs);
+            console.log("Categorized Tabs:", categorizedTabs);
+          } catch (error) {
+            console.error("Failed to categorize and group tabs:", error);
+            return;
+          }
         }
-      }
-    })();
-  }
+      })();
+      break;
 
-  if (message.action === "saveSession") {
-    saveSession();
-  }
-  if (message.action === "restoreSession") {
-    restoreSession();
-  }
-  if (message.type === "TOGGLE_BLOCKER") {
-    chrome.storage.local.set({ enabled: message.enabled });
-    chrome.storage.local.set({ blockedCount: 0 });
-    console.log(message.enabled);
+    case "saveSession":
+      saveSession();
+      break;
 
-    // Send message to all tabs
-    chrome.tabs.query({ currentWindow: true }, (tabs) => {
-      tabs.forEach((tab) => {
-        if (tab.id) {
-          chrome.tabs.sendMessage(tab.id, {
-            type: "TOGGLE_BLOCKER",
-            enabled: message.enabled,
-          });
+    case "restoreSession":
+      restoreSession();
+      break;
+
+    case "toggleBlocker":
+      chrome.storage.local.set({ enabled: message.enabled });
+      chrome.storage.local.set({ blockedCount: 0 });
+      console.log(message.enabled);
+
+      // Send message to all tabs
+      chrome.tabs.query({ currentWindow: true }, (tabs) => {
+        tabs.forEach((tab) => {
+          if (tab.id) {
+            chrome.tabs.sendMessage(tab.id, {
+              action: "toggleBlocker",
+              enabled: message.enabled,
+            });
+          }
+        });
+      });
+      break;
+
+    case "updateCount":
+      chrome.runtime.sendMessage({
+        action: "updateCount",
+        count: message.count,
+      });
+      break;
+
+    case "getTime":
+      chrome.storage.local.get("siteTimes", (data) => {
+        if (data.siteTimes) {
+          sendResponse(data.siteTimes);
         }
       });
-    });
-  }
+      return true;
+      break;
 
-  // Receive count update from content script
-  if (message.type === "UPDATE_COUNT") {
-    chrome.runtime.sendMessage({ type: "UPDATE_COUNT", count: message.count });
+    case "resetTime":
+      resetTracker();
+      break;
+
+    default:
+      console.warn(`Unrecognized action: ${message.action}`);
+      break;
   }
 });
 
@@ -71,7 +95,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
     chrome.storage.local.get("enabled", ({ enabled }) => {
       if (enabled && tabId) {
         chrome.tabs.sendMessage(tabId, {
-          type: "TOGGLE_BLOCKER",
+          action: "toggleBlocker",
           enabled: enabled,
         });
       }

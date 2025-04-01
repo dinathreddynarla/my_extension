@@ -1,10 +1,10 @@
-.popup_container{
+.popup_container {
   width: 100%;
-    font-family: Arial, Helvetica, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
 }
 button {
   border-radius: 8px;
@@ -22,11 +22,33 @@ button:hover {
   background-color: #0a15ea;
 }
 
-.extension{
-    width: 100%;
-    border: 2px dotted blue;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
+.extension {
+  box-sizing: border-box;
+  margin: 3px;
+  width: 95%;
+  border: 2px dotted blue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding-bottom: 10px;
+  background-color: aliceblue;
+}
+p,
+table {
+  font-size: 1.3em;
+}
+
+table,
+td,
+th {
+  border: 2px solid #0a15ea;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td,th {
+  padding: 3px;
 }

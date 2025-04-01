@@ -13,7 +13,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
 //block Ads when message type is toogle_blocker
 chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === "TOGGLE_BLOCKER") {
+  if (message.action === "toggleBlocker") {
     console.log(message.enabled);
     if (message.enabled) {
       removeAds();
@@ -47,7 +47,7 @@ const removeAds = () => {
     });
 
     chrome.storage.local.set({ blockedCount });
-    chrome.runtime.sendMessage({ type: "UPDATE_COUNT", count: blockedCount });
+    chrome.runtime.sendMessage({ action: "updateCount", count: blockedCount });
   });
 };
 
