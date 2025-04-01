@@ -1,0 +1,32 @@
+.popup_container{
+  width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+}
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  cursor: pointer;
+  font-size: 1.3em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #5769cb;
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+button:hover {
+  background-color: #0a15ea;
+}
+
+.extension{
+    width: 100%;
+    border: 2px dotted blue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
