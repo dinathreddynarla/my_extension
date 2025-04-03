@@ -2,8 +2,8 @@ import { resetTracker } from "./ProductivityTracker/productivityTracker";
 import {
   categorizeTabs,
   groupTabsByCategory,
-} from "./tabmanager/categorizeTabs";
-import { restoreSession, saveSession } from "./tabmanager/Session";
+} from "./TabManager/categorizeTabs";
+import { restoreSession, saveSession } from "./TabManager/Session";
 import { getCurrentWindowTabs, injectContentScripts } from "./utils/utils";
 
 chrome.runtime.onInstalled.addListener(async () => {

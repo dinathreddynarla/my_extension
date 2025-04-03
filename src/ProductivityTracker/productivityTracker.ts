@@ -24,8 +24,6 @@ const trackTime = () => {
   if (!activeHostName || !startTime) return;
   
   const timeSpent = Date.now() - startTime;
-  console.log(timeSpent);
-  
   siteTimes[activeHostName] = (siteTimes[activeHostName] || 0) + timeSpent;
 
   startTime = Date.now();

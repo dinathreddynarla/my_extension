@@ -12,7 +12,7 @@ export function categorizeWebsite(metadata: string): Category {
     ) {
       return category as Category;
     }
+    return "Other";
   }
-
-  return "Other";
+  return "Other"
 }
